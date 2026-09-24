@@ -1,0 +1,39 @@
+name: Build Anime World APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.5'
+          channel: stable
+
+      - name: Create Flutter project
+        run: |
+          flutter create --org com.animeworld .
+          mkdir -p lib
+          cp main.dart lib/main.dart
+
+      - name: Get packages
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: anime-world-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
