@@ -22,7 +22,7 @@ jobs:
 
       - name: Create Flutter project
         run: |
-          flutter create --org com.animeworld .
+          flutter create --org com.animeworld --project-name anime_world_v5 .
           mkdir -p lib
           cp main.dart lib/main.dart
 
