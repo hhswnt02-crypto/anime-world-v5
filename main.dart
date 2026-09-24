@@ -99,7 +99,10 @@ class LocalStore {
 
   static Future<void> saveFavorites(Set<int> ids) async {
     final p = await SharedPreferences.getInstance();
-    await p.setStringList(favoritesKey, ids.map('$').toList());
+    await p.setStringList(
+  favoritesKey,
+  ids.map<String>((id) => '$id').toList(),
+);
   }
 }
 
