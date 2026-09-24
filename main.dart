@@ -592,7 +592,15 @@ class _PlayerPageState extends State<PlayerPage> {
             return Center(child: SingleChildScrollView(child: Column(
               children: [
                 AspectRatio(aspectRatio: v.aspectRatio > 0 ? v.aspectRatio : 16/9, child: VideoPlayer(controller)),
-                Slider(value: position, min: 0, max: duration, onChanged: (x) => controller.seekTo(Duration(milliseconds: x.round()))),
+                Slider(
+  value: position.toDouble(),
+  min: 0,
+  max: duration.toDouble(),
+  onChanged: (x) =>
+      controller.seekTo(
+        Duration(milliseconds: x.round()),
+      ),
+),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   IconButton(icon: const Icon(Icons.replay_10, size: 35), onPressed: () {
                     final x = v.position - const Duration(seconds: 10);
