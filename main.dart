@@ -385,7 +385,7 @@ class _HomeState extends State<Home> {
         Text(a.title, maxLines: 1, overflow: TextOverflow.ellipsis,
           style: const TextStyle(fontWeight: FontWeight.bold)),
         Text(a.score == null ? a.type : '⭐ ${a.score}', style: const TextStyle(color: Colors.white54)),
-      ]),
+     ),
   );
 }
 
