@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
-
-const api = 'https://api.jikan.moe/v4';
+const api = 'https://api.tenrai.org/v1';
 
 void main() => runApp(const AnimeWorldApp());
 
