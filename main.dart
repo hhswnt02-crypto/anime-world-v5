@@ -106,18 +106,50 @@ class LocalStore {
 }
 
 class Api {
+  static const bases = [
+    'https://api.tenrai.org/v1',
+    'https://api.jikan.moe/v4',
+  ];
+
   static Future<List<Anime>> list(String path) async {
-    final r = await http.get(Uri.parse('$api$path')).timeout(const Duration(seconds: 20));
-    if (r.statusCode != 200) throw Exception('تعذر تحميل البيانات');
-    final data = jsonDecode(r.body)['data'];
-    if (data is! List) return [];
-    return data.whereType<Map>()
-        .map((e) => Anime.fromJson(Map<String, dynamic>.from(e))).toList();
+    Object? lastError;
+
+    for (final base in bases) {
+      try {
+        final r = await http
+            .get(Uri.parse('$base$path'))
+            .timeout(const Duration(seconds: 15));
+
+        if (r.statusCode != 200) {
+          throw Exception('HTTP ${r.statusCode}');
+        }
+
+        final body = jsonDecode(r.body);
+        final data = body['data'];
+
+        if (data is List) {
+          return data
+              .whereType<Map>()
+              .map((e) =>
+                  Anime.fromJson(Map<String, dynamic>.from(e)))
+              .toList();
+        }
+
+        throw Exception('بيانات غير صالحة');
+      } catch (e) {
+        lastError = e;
+      }
+    }
+
+    throw Exception('تعذر الاتصال: $lastError');
   }
 
-  static Future<List<Anime>> top() => list('/top/anime?limit=24&page=1');
+  static Future<List<Anime>> top() =>
+      list('/top/anime?limit=24&page=1');
+
   static Future<List<Anime>> movies() =>
       list('/anime?type=movie&order_by=score&sort=desc&limit=24');
+
   static Future<List<Anime>> search(String q) =>
       list('/anime?q=${Uri.encodeQueryComponent(q)}&limit=24&sfw=true');
 }
